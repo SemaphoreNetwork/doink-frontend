@@ -3,9 +3,11 @@ import "./App.css";
 import PasteIcon from "./paste-icon.svg";
 
 function App() {
+  const [mintEnabled, setMintEnabled] = useState<boolean>(false);
   const [address, setAddress] = useState<string>("");
 
   const filterInput = function (value: string): string {
+    let newValue = "";
     // Ensure first two chars are "0x".
     if (value.length > 0) {
       if (value[0] !== "0") {
@@ -19,18 +21,22 @@ function App() {
         // Iterate through chars after "0x" to validate they are all hex.
         const regEx = /[0-9a-fA-F]+/;
         const body = value.slice(2);
-        let newValue = "0x";
+        newValue = "0x";
         for (const char of body) {
           const isHex = regEx.exec(char);
           if (isHex) {
             newValue += char;
           }
         }
-        return newValue;
       }
     }
+    if (newValue.length === 42) {
+      setMintEnabled(true);
+    } else {
+      setMintEnabled(false);
+    }
 
-    return value;
+    return newValue;
   };
 
   return (
@@ -51,14 +57,16 @@ function App() {
           />
           <button
             onClick={async () => {
-              setAddress(await navigator.clipboard.readText());
+              setAddress(filterInput(await navigator.clipboard.readText()));
             }}
           >
             <img src={PasteIcon} aria-hidden="true" />
           </button>
         </div>
         <div>
-          <button className="mint-button">MINT</button>
+          <button className="mint-button" disabled={!mintEnabled}>
+            MINT
+          </button>
         </div>
       </div>
     </div>
