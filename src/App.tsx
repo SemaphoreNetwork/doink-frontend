@@ -1,24 +1,29 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import "./App.css";
+import PasteIcon from "./paste-icon.svg";
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="container">
+      <div className="form">
+        {/* <p>hello doinks</p> */}
+        <label className="label">Address</label>
+        <div className="inputBox">
+          <input
+            className="input"
+            placeholder="0xdoink"
+            id="address-input"
+            type="text"
+            style={{ flexGrow: 2 }}
+          />
+          <button>
+            <img src={PasteIcon} aria-hidden="true" />
+          </button>
+        </div>
+        <div>
+          <button className="mint-button">MINT</button>
+        </div>
+      </div>
     </div>
   );
 }

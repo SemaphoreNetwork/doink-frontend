@@ -1,38 +1,141 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+:root {
+  --input-border: #8b8a8b;
+  --input-focus-h: 500;
+  --input-focus-s: 100%;
+  --input-focus-l: 42%;
+}
+
 .App {
   text-align: center;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
+.container {
+  font-family: arial;
+  font-size: 24px;
   min-height: 100vh;
+  position: relative;
+  background-color: #000000;
+}
+
+.form {
+  width: 400px;
+  height: 200px;
+  /* Center vertically and horizontally */
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin: -100px 0 0 -200px; /* Apply negative top and left margins to truly center the element */
+}
+
+.input {
+  box-shadow: 0px 0px 8px 3px rgba(16, 192, 10, 0.47);
+  width: 400px;
+  font-size: 18px;
+  font-family: inherit;
+  color: rgb(223, 223, 223);
+  padding: 0.5em 0.5em;
+  background-color: #ffffff00;
+  border: 2px solid var(--input-border);
+  border-radius: 2px;
+  transition: 180ms box-shadow ease-in-out;
+  font: bold 18px "lucida sans", "trebuchet MS", "Tahoma";
+}
+
+.inputBox {
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  flex-direction: row;
+  width: 400px;
+  height: 56px;
+  margin-bottom: 24px;
 }
 
-.App-link {
-  color: #61dafb;
+.input:-ms-input-placeholder {
+  color: #999;
+  font-weight: normal;
+  font-style: italic;
+  border-style: none;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.input::-webkit-input-placeholder {
+  color: #999;
+  font-weight: normal;
+  font-style: italic;
+}
+
+.input:-moz-placeholder {
+  color: #999;
+  font-weight: normal;
+  font-style: italic;
+}
+
+.input:focus {
+  border-color: hsl(
+    var(--input-focus-h),
+    var(--input-focus-s),
+    var(--input-focus-l)
+  );
+  box-shadow: 0 0 0 3px
+    hsla(
+      var(--input-focus-h),
+      var(--input-focus-s),
+      calc(var(--input-focus-l) + 40%),
+      0.8
+    );
+  outline: 3px solid transparent;
+}
+
+.inputBox button {
+  overflow: visible;
+  position: absolute;
+  float: right;
+  right: 0;
+  border: 0;
+  padding: 0;
+  padding-top: 3px;
+  cursor: pointer;
+  width: 56px;
+  height: 56px;
+  color: #fff;
+  text-transform: uppercase;
+  background: rgb(16, 192, 10);
+  z-index: 100;
+  border-radius: 0px 2px 2px 0px;
+}
+
+.label {
+  color: rgb(223, 223, 223);
+  font-weight: 500;
+  line-height: 1;
+  margin-bottom: 12px;
+  font: bold 18px "lucida sans", "trebuchet MS", "Tahoma";
+}
+
+.mint-button {
+  margin: 0 auto;
+  width: 180px;
+  display: block;
+  outline: 0;
+  cursor: pointer;
+  border: 2px solid #e6e6e6;
+  border-radius: 2px;
+  color: #d8d8d8;
+  background: #000000;
+  font: bold 20px "lucida sans", "trebuchet MS", "Tahoma";
+  font-weight: 600;
+  line-height: 20px;
+  padding: 12px 20px;
+  text-align: center;
+  transition-duration: 0.15s;
+  transition-property: all;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.mint-button:hover {
+  background: rgb(16, 192, 10);
 }
