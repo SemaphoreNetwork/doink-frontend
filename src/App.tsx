@@ -28,9 +28,18 @@ function App() {
             newValue += char;
           }
         }
+
+        // Trim over 42 chars.
+        if (newValue.length > 42) {
+          newValue = newValue.substring(
+            0,
+            newValue.length - (newValue.length - 42)
+          );
+        }
       }
     }
-    if (newValue.length === 42) {
+    // If 42 chars in length, we have a full address.
+    if (newValue.length == 42) {
       setMintEnabled(true);
     } else {
       setMintEnabled(false);

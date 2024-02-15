@@ -40,6 +40,7 @@
   font-family: inherit;
   color: rgb(223, 223, 223);
   padding: 0.5em 0.5em;
+  padding-right: 62px;
   background-color: #ffffff00;
   border: 2px solid var(--input-border);
   border-radius: 2px;
