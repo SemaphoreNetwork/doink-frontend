@@ -5,6 +5,7 @@ import PasteIcon from "./paste-icon.svg";
 function App() {
   const [mintEnabled, setMintEnabled] = useState<boolean>(false);
   const [address, setAddress] = useState<string>("");
+  const [isMinting, setIsMinting] = useState<boolean>(false);
 
   const filterInput = function (value: string): string {
     let newValue = "";
@@ -48,11 +49,44 @@ function App() {
     return newValue;
   };
 
+  const mint = async function () {
+    // Sanity check.
+    if (address.length !== 42) {
+      return;
+    }
+    setIsMinting(true);
+
+    const request = new XMLHttpRequest();
+    request.open("POST", "http://localhost/doink", true);
+    request.onload = function () {
+      if (this.status >= 200 && this.status < 400) {
+        // Success!
+        const data = JSON.parse(this.response) as Response;
+        console.log("success", data);
+      } else {
+        // We reached our target server, but it returned an error
+        console.log("error", this.status, this.response);
+      }
+      setIsMinting(false);
+    };
+
+    request.onerror = function (error) {
+      console.log("error", error);
+      setIsMinting(false);
+    };
+
+    request.setRequestHeader(
+      "Content-Type",
+      "application/x-www-form-urlencoded; charset=UTF-8"
+    );
+    request.send(JSON.stringify({ address }));
+  };
+
   return (
     <div className="container">
       <div className="form">
         <label className="label">Address</label>
-        <div className="inputBox">
+        <div className="input-box">
           <input
             className="input"
             placeholder="0xdoink"
@@ -72,10 +106,18 @@ function App() {
             <img src={PasteIcon} aria-hidden="true" />
           </button>
         </div>
-        <div>
-          <button className="mint-button" disabled={!mintEnabled}>
-            MINT
-          </button>
+        <div className="button-box">
+          {isMinting ? (
+            <div className={isMinting ? "loader" : ""}></div>
+          ) : (
+            <button
+              className="mint-button"
+              disabled={!mintEnabled}
+              onClick={() => mint()}
+            >
+              MINT
+            </button>
+          )}
         </div>
       </div>
     </div>
