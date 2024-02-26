@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import "./App.css";
 import PasteIcon from "./paste-icon.svg";
+import QrReader from "./QrReader";
+import QrScanner from "qr-scanner";
 
 const URL = "http://localhost:5000";
 
@@ -116,6 +118,13 @@ function App() {
 
   return (
     <div className="container">
+      <QrReader
+        {...{
+          onScanUpdate: (result: string) => {
+            console.log(result);
+          },
+        }}
+      />
       <div className="form">
         {isRetrievingId ? (
           <div
