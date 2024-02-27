@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import "./App.css";
 import PasteIcon from "./paste-icon.svg";
+import ScanIcon from "./scan-icon.svg";
 import QrReader from "./QrReader";
-import QrScanner from "qr-scanner";
 
 const URL = "http://localhost:5000";
 
@@ -12,6 +12,7 @@ function App() {
   const [isMinting, setIsMinting] = useState<boolean>(false);
   const [isRetrievingId, setIsRetrievingId] = useState<boolean>(true);
   const [doinkId, setDoinkId] = useState<number>(0);
+  const [qrOpen, setQrOpen] = useState<boolean>(false);
 
   useEffect(() => {
     getNextId();
@@ -118,15 +119,19 @@ function App() {
 
   return (
     <div className="container">
-      <QrReader
-        {...{
-          onScanUpdate: (result: string) => {
-            console.log(result);
-          },
-        }}
-      />
       <div className="form">
-        {isRetrievingId ? (
+        {qrOpen ? (
+          <QrReader
+            {...{
+              onScanUpdate: (result: string | undefined) => {
+                console.log(result);
+              },
+              shouldClose: () => {
+                setQrOpen(false);
+              },
+            }}
+          />
+        ) : isRetrievingId ? (
           <div
             style={{
               display: "flex",
@@ -148,6 +153,22 @@ function App() {
             >
               <h1 style={{ color: "white" }}>Doink #{doinkId}</h1>
             </div>
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <button
+                className="icon-button"
+                onClick={async () => {
+                  setQrOpen(true);
+                }}
+              >
+                <img src={ScanIcon} aria-hidden="true" className="scan-icon" />
+              </button>
+            </div>
             <label className="label">Address</label>
             <div className="input-box">
               <input
@@ -162,11 +183,16 @@ function App() {
                 }}
               />
               <button
+                className="icon-button"
                 onClick={async () => {
                   setAddress(filterInput(await navigator.clipboard.readText()));
                 }}
               >
-                <img src={PasteIcon} aria-hidden="true" />
+                <img
+                  src={PasteIcon}
+                  aria-hidden="true"
+                  className="paste-icon"
+                />
               </button>
             </div>
             <div className="button-box">
