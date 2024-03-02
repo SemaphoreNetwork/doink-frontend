@@ -10,12 +10,14 @@ function App() {
   const [mintEnabled, setMintEnabled] = useState<boolean>(false);
   const [address, setAddress] = useState<string>("");
   const [isMinting, setIsMinting] = useState<boolean>(false);
-  const [isRetrievingId, setIsRetrievingId] = useState<boolean>(true);
-  const [doinkId, setDoinkId] = useState<number>(0);
+  const [isRetrievingId, setIsRetrievingId] = useState<boolean>(false);
+  const [doinkId, setDoinkId] = useState<number | undefined>(undefined);
   const [qrOpen, setQrOpen] = useState<boolean>(false);
 
   useEffect(() => {
-    getNextId();
+    if (!isRetrievingId) {
+      getNextId();
+    }
   }, []);
 
   const filterInput = function (value: string): string {
@@ -67,6 +69,7 @@ function App() {
       return;
     }
     setIsMinting(true);
+    console.log("Submitting mint request...");
 
     const request = new XMLHttpRequest();
     request.open("POST", `${URL}/doink`, true);
@@ -74,16 +77,16 @@ function App() {
       if (this.status >= 200 && this.status < 400) {
         // Success!
         const data = JSON.parse(this.response) as any;
-        console.log("success", data);
+        console.log("mint: success", data);
       } else {
         // We reached our target server, but it returned an error
-        console.log("error", this.status, this.response);
+        console.log("mint: response error", this.status, this.response);
       }
       setIsMinting(false);
     };
 
     request.onerror = function (error) {
-      console.log("error", error);
+      console.log("mint: error", error);
       setIsMinting(false);
     };
 
@@ -93,24 +96,35 @@ function App() {
 
   const getNextId = async function () {
     setIsRetrievingId(true);
+    console.log("Retrieving next Doink ID...");
 
     const request = new XMLHttpRequest();
     request.open("GET", `${URL}/doink`, true);
     request.onload = function () {
       if (this.status >= 200 && this.status < 400) {
         // Success!
-        const data = JSON.parse(this.response) as any;
-        console.log("success", data);
-        setDoinkId(data.id);
+        try {
+          const data = JSON.parse(this.response) as any;
+          console.log("getNextId: success", data);
+          setDoinkId(data.id);
+        } catch (e) {
+          console.log(
+            "getNextId: json parse error",
+            this.status,
+            "response:",
+            typeof this.response,
+            this.response
+          );
+        }
       } else {
         // We reached our target server, but it returned an error
-        console.log("error", this.status, this.response);
+        console.log("getNextId: response error", this.status, this.response);
       }
       setIsRetrievingId(false);
     };
 
     request.onerror = function (error) {
-      console.log("error", error);
+      console.log("getNextId: error", error);
       setIsRetrievingId(false);
     };
 

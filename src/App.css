@@ -30,6 +30,7 @@
   width: 70%;
   height: 200px;
   position: absolute;
+  margin-top: -48px;
 }
 
 .input {
